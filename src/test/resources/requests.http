@@ -1,0 +1,99 @@
+### 1. Login ca ADMIN
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
+> {% client.global.set("admin_token", response.body.token); %}
+
+
+### 2. Login ca USER
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "user"
+}
+
+> {% client.global.set("user_token", response.body.token); %}
+
+
+### 3. Adăugare produs (ADMIN only)
+POST http://localhost:8080/api/products
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+  "name": "Laptop",
+  "price": 1500.0
+}
+
+
+### 4. Lista produse (ADMIN allowed)
+GET http://localhost:8080/api/products
+Authorization: Bearer {{admin_token}}
+
+
+### 5. Detalii produs (ADMIN allowed)
+GET http://localhost:8080/api/products/1
+Authorization: Bearer {{admin_token}}
+
+
+### 6. Modificare preț produs (ADMIN only)
+PATCH http://localhost:8080/api/products/1/price
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+  "price": 1200.0
+}
+
+
+### 7. Ștergere produs (ADMIN only)
+DELETE http://localhost:8080/api/products/1
+Authorization: Bearer {{admin_token}}
+
+
+### 8. Lista produse (USER allowed)
+GET http://localhost:8080/api/products
+Authorization: Bearer {{user_token}}
+
+
+### 9. Detalii produs (USER allowed)
+GET http://localhost:8080/api/products/1
+Authorization: Bearer {{user_token}}
+
+
+### 10. Plasare order (USER allowed)
+POST http://localhost:8080/api/products/1/order?quantity=2
+Authorization: Bearer {{user_token}}
+
+
+### 11. Adăugare produs (USER forbidden -> 403)
+POST http://localhost:8080/api/products
+Content-Type: application/json
+Authorization: Bearer {{user_token}}
+
+{
+  "name": "Telefon",
+  "price": 999.0
+}
+
+
+### 12. Modificare preț produs (USER forbidden -> 403)
+PATCH http://localhost:8080/api/products/1/price
+Content-Type: application/json
+Authorization: Bearer {{user_token}}
+
+{
+  "price": 800.0
+}
+
+
+### 13. Ștergere produs (USER forbidden -> 403)
+DELETE http://localhost:8080/api/products/1
+Authorization: Bearer {{user_token}}
