@@ -69,8 +69,13 @@ Authorization: Bearer {{user_token}}
 
 
 ### 10. Plasare order (USER allowed)
-POST http://localhost:8080/api/products/1/order?quantity=2
+POST http://localhost:8080/api/products/1/order
+Content-Type: application/json
 Authorization: Bearer {{user_token}}
+
+{
+  "quantity": 2
+}
 
 
 ### 11. Adăugare produs (USER forbidden -> 403)
